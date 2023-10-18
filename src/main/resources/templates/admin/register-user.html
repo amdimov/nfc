@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/head :: head}">
+</head>
+
+<body class="stretched side-header open-header push-wrapper close-header-on-scroll">
+
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper">
+
+
+    <div th:replace="~{fragments/header :: header-trigger}"></div>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container">
+                <h1 class="titular-title fw-normal text-center mb-5">ADD USER</h1>
+                <div>
+
+                    <div class="form-result"></div>
+
+                    <form class="row" id="checkout-form" th:object="${userDTO}" th:action="@{/admin/register-user}" th:method="post" enctype="multipart/form-data">
+                        <div class="form-process">
+                            <div class="css3-spinner">
+                                <div class="css3-spinner-scaler"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6">
+                            <div class="row checkout-form-billing">
+                                <div class="col-12">
+                                    <h3>User Information</h3>
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Username/Email:</label>
+                                    <input type="text"
+                                           th:field="*{username}"
+                                           id="checkout-form-billing-name"
+                                           class="form-control required" placeholder="email@yahoo.com">
+                                    <span style="color: red" th:if="${#fields.hasErrors('username')}"
+                                          th:errors="*{username}">Error message</span>
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Password:  </label>
+                                    <input type="password" th:field="*{password}"
+                                           id="checkout-form-billing-password" class="form-control required">
+                                    <span style="color: red" th:if="${#fields.hasErrors('password')}"
+                                          th:errors="*{password}">Error message</span>
+
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Company Name:</label>
+                                    <input type="text" th:field="*{company}" id="checkout-form-billing-company"
+                                           class="form-control required" placeholder="Apple Inc.">
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>First Name:</label>
+                                    <input type="text" th:field="*{firstName}" id="checkout-form-billing-firstName"
+                                           class="form-control" placeholder="John">
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Last Name:</label>
+                                    <input type="text" th:field="*{lastName}" id="checkout-form-billing-lastName"
+                                           class="form-control" placeholder="Doe">
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Email:</label>
+                                    <input th:field="*{contactEmail}" type="email" name="checkout-form-billing-email"
+                                           id="checkout-form-billing-email" class="form-control" placeholder="user@company.com">
+                                    <span style="color: red" th:if="${#fields.hasErrors('contactEmail')}"
+                                          th:errors="*{contactEmail}">Error message</span>
+
+                                </div>
+                                <div class="col-6 form-group">
+                                    <label>Country:</label>
+                                    <select th:field="*{country}" class="form-select required" id="checkout-form-billing-country">
+                                        <th:block th:insert="~{admin/fragments/countries :: countries}"></th:block>
+                                    </select>
+                                    <span style="color: red" th:if="${#fields.hasErrors('country')}"
+                                          th:errors="*{country}">Error message</span>
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Street Address:</label>
+                                    <input th:field="*{address}" type="text" id="checkout-form-billing-street" class="form-control">
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>City:</label>
+                                    <input th:field="*{city}" type="text" id="checkout-form-billing-city" class="form-control">
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Post Code:</label>
+                                    <input th:field="*{postCode}" type="text" id="checkout-form-billing-post-code" class="form-control">
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>Phone:</label><br>
+                                    <input th:field="*{phoneNumber}" type="text" name="checkout-form-billing-phone" id="checkout-form-billing-phone" class="form-control" placeholder="02-232-2424">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3"></div>
+                        <div class="col-12">
+                            <div class="d-none">
+                                <input type="text" id="checkout-form-botcheck" name="checkout-form-botcheck" value="">
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" name="checkout-form-submit" class="btn btn-lg btn-secondary">Register</button>
+                            </div>
+                            <input type="hidden" name="prefix" value="checkout-form-">
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+
+    <!--    <footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="uil uil-angle-up"></div>
+
+<!-- JavaScripts
+============================================= -->
+<script src="/js/plugins.min.js"></script>
+<script src="/js/functions.bundle.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/head :: head}">
+</head>
+
+<body class="stretched side-header open-header push-wrapper close-header-on-scroll">
+
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper">
+
+
+    <div th:replace="~{fragments/header :: header-trigger}"></div>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container">
+                <h1>ADMIN HOME</h1>
+                <div>
+                    <p>Users, Total number of NFC's, total orders</p>
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+
+    <!--    <footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="uil uil-angle-up"></div>
+
+<!-- JavaScripts
+============================================= -->
+<script src="/js/plugins.min.js"></script>
+<script src="/js/functions.bundle.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/head :: head}">
+</head>
+
+<body class="stretched side-header open-header push-wrapper close-header-on-scroll">
+
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper">
+
+
+    <div th:replace="~{fragments/header :: header-trigger}"></div>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+
+
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container">
+                <div class="col-md-8">
+
+                    <form id="register-form" th:object="${user}" class="row" th:action="@{/url}" th:method="POST">
+
+                        <div class="col-6 form-group">
+<!--                            <label for="url">URL</label>-->
+<!--                            <input type="url" id="url" name="tempURL" th:value="${user.userURLTEST.tempURL}" class="form-control">-->
+                        </div>
+
+                        <div class="w-100"></div>
+
+                        <div class="col-12 form-group">
+                            <button class="btn btn-dark m-0" id="register-form-submit" name="register-form-submit" value="register">SET URL</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+
+    <!--    <footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="uil uil-angle-up"></div>
+
+<!-- JavaScripts
+============================================= -->
+<script src="/js/plugins.min.js"></script>
+<script src="/js/functions.bundle.js"></script>
+
+</body>
+</html>
