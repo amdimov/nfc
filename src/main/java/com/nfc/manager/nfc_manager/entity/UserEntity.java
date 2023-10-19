@@ -51,7 +51,7 @@ public class UserEntity extends BaseEntity{
     private UserURL_TEST userURLTEST;
 
     @OneToMany
-    private List<OrdersEntity> orders;
+    private List<NFC> nfcList;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRoles> userRoles;
@@ -84,15 +84,6 @@ public class UserEntity extends BaseEntity{
         return this;
     }
 
-
-    public List<OrdersEntity> getOrders() {
-        return orders;
-    }
-
-    public UserEntity setOrders(List<OrdersEntity> orders) {
-        this.orders = orders;
-        return this;
-    }
 
     public List<UserRoles> getUserRoles() {
         return userRoles;
@@ -199,6 +190,15 @@ public class UserEntity extends BaseEntity{
 
     public UserEntity setSoftDeleted(Boolean softDeleted) {
         this.softDeleted = softDeleted;
+        return this;
+    }
+
+    public List<NFC> getNfcList() {
+        return nfcList;
+    }
+
+    public UserEntity setNfcList(List<NFC> nfcList) {
+        this.nfcList = nfcList;
         return this;
     }
 }

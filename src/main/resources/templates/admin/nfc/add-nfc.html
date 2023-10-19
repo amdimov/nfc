@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/head :: head}">
+</head>
+
+<body class="stretched side-header open-header push-wrapper close-header-on-scroll">
+<!-- Preloader -->
+<div class="preloader preloader-cover-page">
+    <div class="css3-spinner" style="--cnvs-loader-color:var(--cnvs-themecolor);">
+        <div class="css3-spinner-bounce1"></div>
+        <div class="css3-spinner-bounce2"></div>
+        <div class="css3-spinner-bounce3"></div>
+    </div>
+</div>
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper">
+        <div th:replace="~{fragments/header :: header-trigger}"></div>
+        <header th:replace="~{fragments/header :: header}"></header>
+
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container">
+                <h1 class="titular-title fw-normal text-center mb-5">ADD NFC TO USER</h1>
+                <p th:object="${user}" th:text="*{username} + ' | ' + *{company}" class="titular-sub-title text-primary fw-bold text-center mb-5">?</p>
+
+                <div>
+                    <form class="row" id="checkout-form" th:object="${nfc}"
+                          th:action="@{/admin/{username}/add-nfc(username=${user.username})}" th:method="post"
+                          enctype="multipart/form-data">
+                        <div class="form-process">
+                            <div class="css3-spinner">
+                                <div class="css3-spinner-scaler"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6">
+                            <div class="row checkout-form-billing">
+                                <div class="col-12">
+                                    <h3>NFC</h3>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <!-- FILE UPLOAD-->
+                                    <label>Select NFC image:</label><br>
+                                    <input id="input-3" th:field="*{filePreview}" type="file" class="file" multiple data-show-upload="false"
+                                           data-show-caption="true" data-show-preview="true">
+                                    <span style="color: red" th:if="${#fields.hasErrors('filePreview')}"
+                                          th:errors="*{filePreview}">Error message</span>
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>NFC ID </label>
+                                    <input type="text"
+                                           th:field="*{nfcCode}"
+                                           id="checkout-form-billing-nfcIdNumber"
+                                           class="form-control required" placeholder="email@yahoo.com">
+                                    <span style="color: red" th:if="${#fields.hasErrors('nfcCode')}"
+                                          th:errors="*{nfcCode}">Error message</span>
+                                </div>
+                                <div class="col-12 form-group">
+                                    <label>NFC Title</label>
+                                    <input type="text"
+                                           th:field="*{nfcTitle}"
+                                           id="checkout-form-billing-nfcTitle"
+                                           class="form-control required" placeholder="email@yahoo.com">
+                                    <span style="color: red" th:if="${#fields.hasErrors('nfcTitle')}"
+                                          th:errors="*{nfcTitle}">Error message</span>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>NFC Description</label>
+                                    <textarea type="text"
+                                           th:field="*{nfcDescription}"
+                                           id="checkout-form-billing-nfcDescription"
+                                           class="form-control required" placeholder="email@yahoo.com">
+                                    </textarea>
+                                    <span style="color: red" th:if="${#fields.hasErrors('nfcDescription')}"
+                                          th:errors="*{nfcDescription}">Error message</span>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>NFC Static URL Extension</label>
+                                    <input type="text"
+                                              th:field="*{staticNFC_URL}"
+                                              id="checkout-form-billing-staticNFC_URL"
+                                              class="form-control required" placeholder="D2Dt3-CE43">
+                                    <span style="color: red" th:if="${#fields.hasErrors('staticNFC_URL')}"
+                                          th:errors="*{staticNFC_URL}">Error message</span>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>Dynamic Redirect URL (Default to client)</label>
+                                    <input type="url"
+                                              th:field="*{dynamicNFC_URL}"
+                                              id="checkout-form-billing-dynamicNFC_URL"
+                                              class="form-control required" placeholder="https://megaprint-transfers.com">
+                                    <span style="color: red" th:if="${#fields.hasErrors('dynamicNFC_URL')}"
+                                          th:errors="*{dynamicNFC_URL}">Error message</span>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3"></div>
+                        <div class="col-12">
+                            <div class="d-none">
+                                <input type="text" id="checkout-form-botcheck" name="checkout-form-botcheck" value="">
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" name="checkout-form-submit" class="btn btn-lg btn-secondary">ADD</button>
+                            </div>
+                            <input type="hidden" name="prefix" value="checkout-form-">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+
+    <!--    <footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="uil uil-angle-up"></div>
+
+<!-- JavaScripts
+============================================= -->
+<script src="/js/plugins.min.js"></script>
+<script src="/js/functions.bundle.js"></script>
+<script src="/js/components/bs-filestyle.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        jQuery("#input-5").fileinput({showCaption: false});
+
+        jQuery("#input-6").fileinput({
+            showUpload: false,
+            maxFileCount: 10,
+            mainClass: "input-group-lg",
+            showCaption: true
+        });
+
+        jQuery("#input-8").fileinput({
+            mainClass: "input-group-md",
+            showUpload: true,
+            previewFileType: "image",
+            browseClass: "btn btn-success",
+            browseLabel: "Pick Image",
+            browseIcon: "<i class=\"bi-image\"></i> ",
+            removeClass: "btn btn-danger",
+            removeLabel: "Delete",
+            removeIcon: "<i class=\"bi-trash3\"></i> ",
+            uploadClass: "btn btn-info",
+            uploadLabel: "Upload",
+            uploadIcon: "<i class=\"bi-upload\"></i> "
+        });
+
+        jQuery("#input-9").fileinput({
+            previewFileType: "text",
+            allowedFileExtensions: ["txt", "md", "ini", "text"],
+            previewClass: "bg-warning",
+            browseClass: "btn btn-primary",
+            removeClass: "btn btn-secondary",
+            uploadClass: "btn btn-secondary",
+        });
+
+        jQuery("#input-10").fileinput({
+            showUpload: false,
+            layoutTemplates: {
+                main1: "{preview}\n" +
+                    "<div class=\'input-group {class}\'>\n" +
+                    "       {browse}\n" +
+                    "       {upload}\n" +
+                    "       {remove}\n" +
+                    "   {caption}\n" +
+                    "</div>"
+            }
+        });
+
+        jQuery("#input-11").fileinput({
+            maxFileCount: 10,
+            allowedFileTypes: ["image", "video"]
+        });
+
+        jQuery("#input-12").fileinput({
+            showPreview: false,
+            allowedFileExtensions: ["zip", "rar", "gz", "tgz"],
+            elErrorContainer: "#errorBlock"
+        });
+    });
+
+</script>
+</body>
+</html>

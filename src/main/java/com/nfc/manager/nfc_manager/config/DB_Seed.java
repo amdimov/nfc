@@ -46,7 +46,7 @@ public class DB_Seed implements CommandLineRunner {
                     .orElseThrow(() -> new IllegalArgumentException("No such Role"));
             UserEntity userEntity = new UserEntity().setCompany("Megaprint Transfers")
                     .setUsername("admin")
-                    .setPassword(passwordEncoder.encode("bulgariavarna"))
+                    .setPassword(passwordEncoder.encode("1234"))
                     .setContactEmail("edisikav@gmail.com")
                     .setCountry("BG")
                     .setSoftDeleted(false)
@@ -54,12 +54,12 @@ public class DB_Seed implements CommandLineRunner {
             userRepo.save(userEntity);
         }
 
-        seedDummyUsersTEST();
+//        seedDummyUsersTEST();
 
 //        if (userRepo.findUserByUsername("user").orElse(null) == null){
 //            UserEntity userEntity = new UserEntity().setCompany("Megaprint Transfers")
 //                    .setUsername("user")
-//                    .setPassword(passwordEncoder.encode("bulgariavarna"))
+//                    .setPassword(passwordEncoder.encode("1234"))
 //                    .setUserRoles(List.of(new UserRoles().setUserRoleEnum(UserRoleEnum.USER)));
 //            if (userURLRepo.count() == 0){
 //                UserURL_TEST userURLTEST = new UserURL_TEST().setUrl("http://192.168.1.109/url/" + UUID.randomUUID());

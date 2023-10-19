@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -51,10 +52,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserView> fetchPagebleUsers(Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         System.out.println(pageable);
         Page<UserEntity> all = userRepo.findAll(pageable);
         System.out.println(all);
         return all.map(e -> modelMapper.map(e, UserView.class));
+    }
+
+    @Override
+    public UserView getUserByUsername(String username) {
+        Optional<UserEntity> user = userRepo.findUserByUsername(username);
+        return modelMapper.map(user.orElseThrow(()->new IllegalArgumentException("No user with this username")), UserView.class);
     }
 }

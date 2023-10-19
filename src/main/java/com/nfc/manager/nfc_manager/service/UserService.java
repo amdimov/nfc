@@ -11,4 +11,6 @@ public interface UserService {
     Boolean usernameExists(String username);
 
     Page<UserView> fetchPagebleUsers(Integer pageNo, Integer pageSize, String sortBy);
+
+    UserView getUserByUsername(String username);
 }

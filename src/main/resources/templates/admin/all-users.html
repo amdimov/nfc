@@ -4,7 +4,14 @@
 </head>
 
 <body class="stretched side-header open-header push-wrapper close-header-on-scroll">
-
+<!-- Preloader -->
+<div class="preloader preloader-cover-page">
+    <div class="css3-spinner" style="--cnvs-loader-color:var(--cnvs-themecolor);">
+        <div class="css3-spinner-bounce1"></div>
+        <div class="css3-spinner-bounce2"></div>
+        <div class="css3-spinner-bounce3"></div>
+    </div>
+</div>
 <!-- Document Wrapper
 ============================================= -->
 <div id="wrapper">
@@ -13,6 +20,7 @@
     <div th:replace="~{fragments/header :: header-trigger}"></div>
     <header th:replace="~{fragments/header :: header}"></header>
 
+    <!-- Rest of your website content -->
 
     <!-- Content
     ============================================= -->
@@ -22,16 +30,24 @@
                 <h1 class="titular-title fw-normal text-center mb-5">ALL USERS</h1>
                 <div class="table-responsive">
 
-                    <div class="row">
+                    <div class="row lazy" >
                         <div class="col-sm-12 col-md-6">
-                            <div class="dataTables_length" id="datatable1_length"><label>Show <select
-                                    name="datatable1_length" aria-controls="datatable1"
+                            <div class="dataTables_length" id="dataTables_length">
+                                <form th:method="get">
+                                <label>Show entries
+                                <select onchange="this.form.submit()"
+                                    name="pageSize" aria-controls="datatable1"
                                     class="form-select form-select-sm">
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select> entries</label></div>
+                                    <option value="10" th:selected="${currentPageSize == 10}">10</option>
+                                    <option value="25" th:selected="${currentPageSize == 25}">25</option>
+                                    <option value="50" th:selected="${currentPageSize == 50}">50</option>
+                                    <option value="100" th:selected="${currentPageSize == 100}">100</option>
+                                     </select>
+                                </label>
+                                </form>
+                            </div>
+
+
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div id="datatable1_filter" class="dataTables_filter">
@@ -77,178 +93,65 @@
                             <th>Post Code</th>
                             <th>Phone Number</th>
                             <th>Contact Email</th>
-                            <th>User Role</th>
                             <th>Registered</th>
                             <th>Action</th>
                         </tr>
                         </tfoot>
                         <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
+                        <tr th:each="e : ${usersPage}" th:object="${e}">
+                            <td th:text="*{id}">?</td>
+                            <td th:text="*{username}">?</td>
+                            <td th:text="*{company}">?</td>
+                            <td th:text="*{firstName}">?</td>
+                            <td th:text="*{lastName}">?</td>
+                            <td th:text="*{country}">?</td>
+                            <td th:text="*{address}">?</td>
+                            <td th:text="*{city}">?</td>
+                            <td th:text="*{postCode}">?</td>
+                            <td th:text="*{phoneNumber}">?</td>
+                            <td th:text="*{contactEmail}">?</td>
+                            <td th:text="*{#temporals.format(registrationDate, 'dd-MM-yyyy HH:mm')}">?</td>
+                            <td>
+                                <a th:href="@{/admin/{user}/add-nfc(user=*{username})}" style="margin: 0.2rem;" class="btn btn-light">
+                                    <iconify-icon icon="wpf:nfc-checkpoint"></iconify-icon>
+                                </a>
+                                <a th:href="@{/admin/{user}/edit-user(user=*{username})}" style="margin: 0.2rem; " class="btn btn-light">
+                                    <iconify-icon icon="ic:round-edit"></iconify-icon>
+                                </a>
+                            </td>
                         </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>$320,800</td>
-                        </tr>
+
                         </tbody>
                     </table>
 
 <!--                    PAGIONATION-->
-                    <div class="col-sm-12 col-md-7">
+                    <div th:if="${pageNumbers}" th:object="${usersPage}" class="col-sm-12 col-md-7">
                         <div class="dataTables_paginate paging_simple_numbers" id="datatable1_paginate">
                             <ul class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="datatable1_previous"><a
-                                        href="#" aria-controls="datatable1" data-dt-idx="0" tabindex="0"
-                                        class="page-link">Previous</a></li>
-                                <li class="paginate_button page-item active"><a href="#" aria-controls="datatable1"
-                                                                                data-dt-idx="1" tabindex="0"
-                                                                                class="page-link">1</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="datatable1"
-                                                                          data-dt-idx="2" tabindex="0"
-                                                                          class="page-link">2</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="datatable1"
-                                                                          data-dt-idx="3" tabindex="0"
-                                                                          class="page-link">3</a></li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="datatable1"
-                                     data-dt-idx="4" tabindex="0"
-                                     class="page-link">4</a></li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="datatable1"
-                                    data-dt-idx="5" tabindex="0"
-                                    class="page-link">5</a></li>
-                                <li class="paginate_button page-item ">
-                                    <a href="#" aria-controls="datatable1"
-                                    data-dt-idx="6" tabindex="0"
-                                    class="page-link">6</a>
+                                <!-- Previous Button -->
+                                <li class="paginate_button page-item" th:classappend="${usersPage.number == 0} ? disabled : ''" id="datatable1_previous">
+                                    <a th:href="${usersPage.number == 0} ? '#' : @{/admin/all-users(pageNo=${usersPage.number - 1}, pageSize=${currentPageSize})}"
+                                       aria-controls="datatable1"
+                                       data-dt-idx="0"
+                                       tabindex="0"
+                                       class="page-link">Previous</a>
                                 </li>
-                                <li class="paginate_button page-item next" id="datatable1_next">
-                                    <a href="#"
-                                    aria-controls="datatable1"
-                                    data-dt-idx="7"
-                                    tabindex="0"
-                                    class="page-link">Next</a>
+                                <li th:each="e : ${pageNumbers}" th:classappend="${e == usersPage.number+1} ? active" class="paginate_button page-item">
+                                    <a th:href="@{/admin/all-users(pageNo=${e-1}, pageSize=${currentPageSize})}"
+                                       aria-controls="datatable1"
+                                    data-dt-idx="1" tabindex="0"
+                                    class="page-link" th:text="${e}">1</a>
+                                </li>
+
+                                <!-- Next Button -->
+                                <li class="paginate_button page-item"
+                                    th:classappend="${usersPage.number + 1 == usersPage.totalPages} ? disabled : ''"
+                                    id="datatable1_next">
+                                    <a th:href="${usersPage.number + 1 == usersPage.totalPages} ? '#' : @{/admin/all-users(pageNo=${usersPage.number + 1}, pageSize=${currentPageSize})}"
+                                       aria-controls="datatable1"
+                                       data-dt-idx="7"
+                                       tabindex="0"
+                                       class="page-link">Next</a>
                                 </li>
                             </ul>
                         </div>

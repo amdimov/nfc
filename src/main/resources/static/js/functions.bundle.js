@@ -8711,3 +8711,7 @@ if( typeof jQuery !== 'undefined' ) {
 		// BSComponents Functions End
 	};
 })));
+window.onload = function() {
+	var preloader = document.querySelector('.preloader');
+	preloader.style.display = 'none';
+};

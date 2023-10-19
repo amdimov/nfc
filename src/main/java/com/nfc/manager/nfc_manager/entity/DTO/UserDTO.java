@@ -1,10 +1,6 @@
 package com.nfc.manager.nfc_manager.entity.DTO;
 
-import com.nfc.manager.nfc_manager.entity.OrdersEntity;
-import com.nfc.manager.nfc_manager.entity.UserRoles;
-import com.nfc.manager.nfc_manager.entity.UserURL_TEST;
 import com.nfc.manager.nfc_manager.utils.validator.UniqueUsername;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;

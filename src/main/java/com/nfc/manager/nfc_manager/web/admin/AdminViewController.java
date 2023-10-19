@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/admin")
@@ -28,10 +31,19 @@ public class AdminViewController {
 
     @GetMapping("/all-users")
     public String adminAllUsers(@RequestParam(required = false) Optional<Integer> pageNo,
-                                @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize,
-                                @RequestParam(name = "sortBy", defaultValue = "id") String sortBy, Model model){
-        Page<UserView> pageViews = userService.fetchPagebleUsers(pageNo.orElse(0), pageSize, sortBy);
-        System.out.println(pageViews);
+                                @RequestParam(name = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+                                @RequestParam(name = "sortBy", defaultValue = "registrationDate", required = false) String sortBy, Model model){
+        Page<UserView> userPages = userService.fetchPagebleUsers(pageNo.orElse(0), pageSize, sortBy);
+        model.addAttribute("usersPage", userPages);
+        int totalPages = userPages.getTotalPages();
+        System.out.println(userPages);
+        model.addAttribute("currentPageSize", pageSize);
+        if (totalPages > 0){
+            List<Integer> pageNumbers = IntStream.range(1, totalPages+1)
+                    .boxed().collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+
+        }
         return "admin/all-users";
     }
 }

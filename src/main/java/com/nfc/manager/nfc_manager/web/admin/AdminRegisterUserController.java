@@ -36,7 +36,7 @@ public class AdminRegisterUserController {
             redirectAttributes
                     .addFlashAttribute("org.springframework.validation.BindingResult.userDTO"
                             , bindingResult);
-            return "redirect:/admin/register-user";
+            return "redirect:/admin/register-users";
         }
         userDTO.setRegistrationDate(LocalDateTime.now());
         userService.registerUser(userDTO);

@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserView {
+    private Long id;
 
     private String username;
 
@@ -145,4 +146,12 @@ public class UserView {
         return this;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public UserView setId(Long id) {
+        this.id = id;
+        return this;
+    }
 }
