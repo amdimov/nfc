@@ -35,6 +35,9 @@ public class NFC extends BaseEntity{
     @Column(nullable = false)
     private LocalDateTime createdDateTime;
 
+    @ManyToOne
+    private UserEntity user;
+
     public String getStaticNFC_URL() {
         return staticNFC_URL;
     }
@@ -123,6 +126,15 @@ public class NFC extends BaseEntity{
 
     public NFC setNfcCode(String nfcCode) {
         this.nfcCode = nfcCode;
+        return this;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public NFC setUser(UserEntity user) {
+        this.user = user;
         return this;
     }
 }

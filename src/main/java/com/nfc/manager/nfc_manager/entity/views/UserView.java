@@ -38,6 +38,8 @@ public class UserView {
 
     private LocalDateTime registrationDate;
 
+    private List<NFC_View> nfcList;
+
     public String getUsername() {
         return username;
     }
@@ -152,6 +154,15 @@ public class UserView {
 
     public UserView setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public List<NFC_View> getNfcList() {
+        return nfcList;
+    }
+
+    public UserView setNfcList(List<NFC_View> nfcList) {
+        this.nfcList = nfcList;
         return this;
     }
 }

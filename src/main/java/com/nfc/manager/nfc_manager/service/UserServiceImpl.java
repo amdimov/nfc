@@ -1,17 +1,22 @@
 package com.nfc.manager.nfc_manager.service;
 
 import com.nfc.manager.nfc_manager.entity.DTO.UserDTO;
+import com.nfc.manager.nfc_manager.entity.NFC;
 import com.nfc.manager.nfc_manager.entity.UserEntity;
 import com.nfc.manager.nfc_manager.entity.UserRoleEnum;
 import com.nfc.manager.nfc_manager.entity.UserRoles;
+import com.nfc.manager.nfc_manager.entity.views.NFC_View;
 import com.nfc.manager.nfc_manager.entity.views.UserView;
+import com.nfc.manager.nfc_manager.repositories.NFCRepo;
 import com.nfc.manager.nfc_manager.repositories.UserRepo;
 import com.nfc.manager.nfc_manager.repositories.UserRolesRepo;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +27,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
     private final UserRolesRepo userRolesRepo;
+    private final NFCRepo nfcRepo;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepo userRepo, UserRolesRepo userRolesRepo,
-                           ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+                           NFCRepo nfcRepo, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.userRolesRepo = userRolesRepo;
+        this.nfcRepo = nfcRepo;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
     }
@@ -51,11 +58,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Page<UserView> fetchPagebleUsers(Integer pageNo, Integer pageSize, String sortBy) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
         System.out.println(pageable);
         Page<UserEntity> all = userRepo.findAll(pageable);
-        System.out.println(all);
         return all.map(e -> modelMapper.map(e, UserView.class));
     }
 
@@ -64,4 +71,5 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> user = userRepo.findUserByUsername(username);
         return modelMapper.map(user.orElseThrow(()->new IllegalArgumentException("No user with this username")), UserView.class);
     }
+
 }
