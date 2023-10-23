@@ -15,20 +15,39 @@
 <!-- Document Wrapper
 ============================================= -->
 <div id="wrapper">
-        <div th:replace="~{fragments/header :: header-trigger}"></div>
-        <header th:replace="~{fragments/header :: header}"></header>
+    <div th:replace="~{fragments/header :: header-trigger}"></div>
+    <header th:replace="~{fragments/header :: header}"></header>
 
     <!-- Content
     ============================================= -->
     <section id="content">
         <div class="content-wrap">
             <div class="container">
-                <h1 class="titular-title fw-normal text-center mb-5">ADD NFC TO USER</h1>
-                <p th:object="${user}" th:text="*{username} + ' | ' + *{company}" class="titular-sub-title text-primary fw-bold text-center mb-5">?</p>
-
+<!--                <h1 class="titular-title fw-normal text-center mb-5">EDIT USER NFC</h1>-->
+                <div class="row flex-row-reverse align-items-center justify-content-between g-5">
+                    <div class="col-lg-6">
+                        <div class="cascading-images">
+                            <div class="cascading-images-inner">
+                                <div class="cascading-image p-6">
+                                    <div style="">
+                                        <div class="parallax" data-bottom-top="transform: translate(0%, -15%)" data-top-bottom="transform: translate(-10%, 15%)">
+                                            <img th:src="${userNfc.imagePreviewURL}" alt="Image" data-animate="zoomIn faster" class="rounded-3 shadow-lg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <h2 th:text="${userNfc.nfcTitle}">Title</h2>
+                        <p  th:text="'Static URL: https://nfc-manager.com/nfc/' + ${userNfc.nfcCode} +'/'+ ${userNfc.staticNFC_URL}">Description</p>
+                        <p  th:text="'Pointing to: ' + ${userNfc.dynamicNFC_URL}">Description</p>
+                    </div>
+                </div>
                 <div>
-                    <form class="row" id="checkout-form" th:object="${nfc}"
-                          th:action="@{/admin/{username}/add-nfc(username=${user.username})}" th:method="post"
+                    <form class="row" id="checkout-form" th:object="${userNfc}"
+                          th:action="@{/admin/{username}/{nfcCode}/edit-nfc(username=${username}, nfcCode=${nfcCode})}"
+                          th:method="post"
                           enctype="multipart/form-data">
                         <div class="form-process">
                             <div class="css3-spinner">
@@ -39,12 +58,12 @@
                         <div class="col-lg-6">
                             <div class="row checkout-form-billing">
                                 <div class="col-12">
-                                    <h3>NFC</h3>
+                                    <h2>Edit</h2>
                                 </div>
 
                                 <div class="col-12 form-group">
                                     <!-- FILE UPLOAD-->
-                                    <label>Select NFC image:</label><br>
+                                    <label>Change NFC image:</label><br>
                                     <input id="input-3" th:field="*{filePreview}" type="file" class="file" multiple data-show-upload="false"
                                            data-show-caption="true" data-show-preview="true">
                                     <span style="color: red" th:if="${#fields.hasErrors('filePreview')}"
@@ -69,12 +88,13 @@
                                           th:errors="*{nfcTitle}">Error message</span>
                                 </div>
 
+
                                 <div class="col-12 form-group">
                                     <label>NFC Description</label>
                                     <textarea type="text"
-                                           th:field="*{nfcDescription}"
-                                           id="checkout-form-billing-nfcDescription"
-                                           class="form-control required" placeholder="email@yahoo.com">
+                                              th:field="*{nfcDescription}"
+                                              id="checkout-form-billing-nfcDescription"
+                                              class="form-control required" placeholder="email@yahoo.com">
                                     </textarea>
                                     <span style="color: red" th:if="${#fields.hasErrors('nfcDescription')}"
                                           th:errors="*{nfcDescription}">Error message</span>
@@ -93,9 +113,9 @@
                                 <div class="col-12 form-group">
                                     <label>NFC Static URL Extension</label>
                                     <input type="text"
-                                              th:field="*{staticNFC_URL}"
-                                              id="checkout-form-billing-staticNFC_URL"
-                                              class="form-control required" placeholder="D2Dt3-CE43">
+                                           th:field="*{staticNFC_URL}"
+                                           id="checkout-form-billing-staticNFC_URL"
+                                           class="form-control required" placeholder="D2Dt3-CE43">
                                     <span style="color: red" th:if="${#fields.hasErrors('staticNFC_URL')}"
                                           th:errors="*{staticNFC_URL}">Error message</span>
                                 </div>
@@ -103,13 +123,26 @@
                                 <div class="col-12 form-group">
                                     <label>Dynamic Redirect URL (Default to client)</label>
                                     <input type="url"
-                                              th:field="*{dynamicNFC_URL}"
-                                              id="checkout-form-billing-dynamicNFC_URL"
-                                              class="form-control required" placeholder="https://megaprint-transfers.com">
+                                           th:field="*{dynamicNFC_URL}"
+                                           id="checkout-form-billing-dynamicNFC_URL"
+                                           class="form-control required" placeholder="https://megaprint-transfers.com">
                                     <span style="color: red" th:if="${#fields.hasErrors('dynamicNFC_URL')}"
                                           th:errors="*{dynamicNFC_URL}">Error message</span>
                                 </div>
-
+                                <div class="col-12 form-group">
+                                    <label>Enabled</label>
+                                    <div class="switch mb-4">
+<!--                                        TODO-->
+                                        <input th:field="*{disabled}" th:id="switch-toggle-2" class="switch-toggle switch-toggle-round" type="checkbox">
+                                        <label th:for="switch-toggle-2"></label>
+                                    </div>
+<!--                                    <span style="color: red" th:if="${#fields.hasErrors('dynamicNFC_URL')}"-->
+<!--                                          th:errors="*{dynamicNFC_URL}">Error message</span>-->
+                                </div>
+                                <input type="hidden" th:field="*{imagePreviewURL}">
+                                <input type="hidden" th:field="*{deleted}">
+                                <input type="hidden" th:field="*{createdDateTime}">
+                                <input type="hidden" th:field="*{id}">
 
                             </div>
                         </div>

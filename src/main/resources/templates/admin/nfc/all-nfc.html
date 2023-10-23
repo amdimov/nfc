@@ -27,37 +27,44 @@
     <section id="content">
         <div class="content-wrap">
 
+            <form>
             <div class="section mt-0 overflow-visible">
                 <div class="container">
                     <div class="row justify-content-center text-center">
                         <div class="col-lg-7">
                             <div class="heading-block border-bottom-0 mb-4">
-                                <h2 class="mb-3">Ready to Fund? Explore Projects</h2>
-                                <p class="text-muted mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste reprehenderit fugiat quisquam nesciunt. Dicta quis, rem consequuntur est beatae qui.</p>
+                                <h2 class="mb-3">Ready to launch your NFC?</h2>
+                                <p class="text-muted mb-0">Manager your NFC here</p>
                             </div>
                             <div class="input-group input-group-lg mb-4">
-                                <input type="text" class="form-control w-auto" aria-label="Text input with dropdown button" placeholder="Search..">
-                                <select class="form-select col col-4">
-                                    <option selected value="All">All</option>
-                                    <option value="Business">Business</option>
-                                    <option value="Design">Design</option>
-                                    <option value="Tech">Tech</option>
-                                    <option value="Fashion">Fashion</option>
-                                    <option value="Music">Music</option>
-                                    <option value="Software">Software</option>
-                                    <option value="Hardware">Hardware</option>
-                                </select>
-                                <button class="btn bg-color text-white border-0" type="button"><i class="uil uil-search"></i></button>
+                                    <input name="searchNFC" th:value="${searchNFC}" type="text" class="form-control w-auto"
+                                            aria-label="Text input with dropdown button" placeholder="Search..">
+    <!--                                <select class="form-select col col-4">-->
+    <!--                                    <option selected value="All">All</option>-->
+    <!--                                    <option value="Business">Business</option>-->
+    <!--                                    <option value="Design">Design</option>-->
+    <!--                                    <option value="Tech">Tech</option>-->
+    <!--                                    <option value="Fashion">Fashion</option>-->
+    <!--                                    <option value="Music">Music</option>-->
+    <!--                                    <option value="Software">Software</option>-->
+    <!--                                    <option value="Hardware">Hardware</option>-->
+    <!--                                </select>-->
+                                    <button class="btn bg-color text-white border-0" type="submit"><i class="uil uil-search"></i></button>
                             </div>
-                            <a class="button button-rounded" href="#" role="button">Popular</a>
-                            <a class="button button-rounded button-dark button-black" href="#" role="button">Newest</a>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
 
 
-            <h3 th:if="${#lists.isEmpty(allNfcOfUser.content)}">No NFC registered to this user</h3>
+            <div class="container" th:if="${not #lists.isEmpty(allNfcOfUser.content)}">
+                <div class="row">
+                <h3 th:if="${#lists.isEmpty(allNfcOfUser.content)}">No NFC</h3>
+
+                </div>
+            </div>
+
             <div class="container" th:if="${not #lists.isEmpty(allNfcOfUser.content)}">
 
                 <div class="row">
@@ -66,14 +73,14 @@
                     <div th:each="e : ${allNfcOfUser}" th:object="${e}" class="col-lg-4 col-sm-6 mb-4">
                         <div class="i-products">
                             <div class="products-image">
-                                <a href="demo-crowdfunding-single.html">
+                                <a th:href="@{/admin/{user}/{nfcCode}/edit-nfc(user=${username}, nfcCode=*{nfcCode})}">
                                     <img th:src="*{imagePreviewURL}" th:alt="*{nfcTitle}">
                                     <span class="badge" style="background-color: green; color: white;" th:if="*{!disabled}">Active</span>
                                     <span class="badge" style="background-color: red; color: white;"  th:if="*{disabled}">Inactive</span>
                                 </a>
                             </div>
                             <div class="products-desc">
-                                <h3><a href="demo-crowdfunding-single.html" th:text="*{nfcTitle}">Title</a></h3>
+                                <h3><a th:href="@{/admin/{user}/{nfcCode}/edit-nfc(user=${username}, nfcCode=*{nfcCode})}" th:text="*{nfcTitle}">Title</a></h3>
                                 <p th:text="*{nfcDescription}">Description</p>
                                 <div class="skill-progress mb-3" data-percent="100" style="--cnvs-progress-height: 0.25rem;">
                                     <div class="skill-progress-title d-flex justify-content-between mb-2">
@@ -84,23 +91,53 @@
                                     </div>
                                 </div>
                                 <div class="products-hoverlays">
-                                    <span class="products-location"><i class="bi-geo-alt-fill"></i> Melbourne, Australia</span>
+<!--                                    <span class="products-location"><i class="bi-geo-alt-fill"></i> Melbourne, Australia</span>-->
                                     <ul class="list-group-flush my-3 mb-0">
-                                        <li class="list-group-item">Points to <strong th:text="*{dynamicNFC_URL}"></strong></li>
+                                        <li class="list-group-item">Points to <strong style="word-wrap: break-word;  overflow-wrap: break-word; white-space: normal;" th:text="*{dynamicNFC_URL}"></strong></li>
 <!--                                        <li class="list-group-item"><strong th:text="*{numberOfNFCs}">NFC Number</strong> NFCs</li>-->
                                         <li class="list-group-item">Quantity <strong th:text="*{numberOfNFCs}">Number</strong></li>
                                         <li class="list-group-item">Launched on <strong th:text="*{#temporals.format(createdDateTime, 'dd-MM-yyyy HH:mm')}">Date</strong></li>
                                     </ul>
                                     <div class="product-user d-flex align-items-center mt-4">
-                                        <img src="demos/crowdfunding/images/investors/1.jpg" alt="">
-                                        <a href="demo-crowdfunding-single.html">By Jackson Pot </a>
+                                        <a class="btn btn-success" style="color: white" th:href="@{/admin/{user}/{nfcCode}/edit-nfc(user=${username}, nfcCode=*{nfcCode})}">Edit </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                </div>
+                <!--  PAGIONATION-->
+                <div th:if="${pageNumbers}" th:object="${allNfcOfUser}" class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable1_paginate">
+                        <ul class="pagination">
+                            <!-- Previous Button -->
+                            <li class="paginate_button page-item" th:classappend="${allNfcOfUser.number == 0} ? disabled : ''" id="datatable1_previous">
+                                <a th:href="${allNfcOfUser.number == 0} ? '#' : @{/admin/{user}/all-nfc(pageNo=${allNfcOfUser.number - 1}, pageSize=${currentPageSize}, searchNFC=${searchNFC})}"
+                                   aria-controls="datatable1"
+                                   data-dt-idx="0"
+                                   tabindex="0"
+                                   class="page-link">Previous</a>
+                            </li>
+                            <li th:each="e : ${pageNumbers}" th:classappend="${e == allNfcOfUser.number+1} ? active" class="paginate_button page-item">
+                                <a th:href="@{/admin/{user}/all-nfc(user=${username}, pageNo=${e-1}, pageSize=${currentPageSize}, searchNFC=${searchNFC})}"
+                                   aria-controls="datatable1"
+                                   data-dt-idx="1" tabindex="0"
+                                   class="page-link" th:text="${e}">1</a>
+                            </li>
 
+                            <!-- Next Button -->
+                            <li class="paginate_button page-item"
+                                th:classappend="${allNfcOfUser.number + 1 == allNfcOfUser.totalPages} ? disabled : ''"
+                                id="datatable1_next">
+                                <a th:href="${allNfcOfUser.number + 1 == allNfcOfUser.totalPages} ? '#' : @{/admin/{user}/all-nfc(user=${username}, pageNo=${allNfcOfUser.number + 1}, pageSize=${currentPageSize}, searchNFC=${searchNFC})}"
+                                   aria-controls="datatable1"
+                                   data-dt-idx="7"
+                                   tabindex="0"
+                                   class="page-link">Next</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

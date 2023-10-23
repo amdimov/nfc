@@ -1,9 +1,7 @@
 package com.nfc.manager.nfc_manager.config;
 
-import com.nfc.manager.nfc_manager.entity.UserEntity;
-import com.nfc.manager.nfc_manager.entity.UserRoleEnum;
-import com.nfc.manager.nfc_manager.entity.UserRoles;
-import com.nfc.manager.nfc_manager.entity.UserURL_TEST;
+import com.nfc.manager.nfc_manager.entity.*;
+import com.nfc.manager.nfc_manager.repositories.NFCRepo;
 import com.nfc.manager.nfc_manager.repositories.UserRepo;
 import com.nfc.manager.nfc_manager.repositories.UserRolesRepo;
 import com.nfc.manager.nfc_manager.repositories.UserURLRepo;
@@ -13,19 +11,22 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Component
 public class DB_Seed implements CommandLineRunner {
     private final UserRepo userRepo;
     private final UserRolesRepo userRolesRepo;
     private final PasswordEncoder passwordEncoder;
+
+    private final NFCRepo nfcRepo;
     private final UserURLRepo userURLRepo;
 
-    public DB_Seed(UserRepo userRepo, UserRolesRepo userRolesRepo, PasswordEncoder passwordEncoder, UserURLRepo userURLRepo) {
+    public DB_Seed(UserRepo userRepo, UserRolesRepo userRolesRepo, PasswordEncoder passwordEncoder, NFCRepo nfcRepo, UserURLRepo userURLRepo) {
         this.userRepo = userRepo;
         this.userRolesRepo = userRolesRepo;
         this.passwordEncoder = passwordEncoder;
+        this.nfcRepo = nfcRepo;
         this.userURLRepo = userURLRepo;
     }
 
@@ -54,7 +55,9 @@ public class DB_Seed implements CommandLineRunner {
             userRepo.save(userEntity);
         }
 
+
 //        seedDummyUsersTEST();
+//        seedDummyNFCToUser("user_49");
 
 //        if (userRepo.findUserByUsername("user").orElse(null) == null){
 //            UserEntity userEntity = new UserEntity().setCompany("Megaprint Transfers")
@@ -69,6 +72,27 @@ public class DB_Seed implements CommandLineRunner {
 //            userRepo.save(userEntity);
 //        }
 
+    }
+
+    private void seedDummyNFCToUser(String username) {
+        Optional<UserEntity> user49 = userRepo.findUserByUsername(username);
+        List<NFC> usersNFC = user49.get().getNfcList();
+        for (int i = 0; i < 100; i++) {
+            NFC nfc = new NFC().setDeleted(false).setDisabled(false)
+                    .setCreatedDateTime(LocalDateTime.now())
+                    .setNfcCode("TESTNFC" + i)
+                    .setDynamicNFC_URL("test.com/examplenfc")
+                    .setStaticNFC_URL("AF3BFD4D-E61D-44F6-A719-7355EC1ABC2A" + i)
+                    .setDynamicURLTitle("Test NFC Title")
+                    .setImagePreviewURL("https://capandura-s3-bucket1.s3.eu-central-1.amazonaws.com/dd7ee455-b430-4397-afe1-c9e6cf22bf7e_BRING_ME_BACK.jpg")
+                    .setNfcDescription("Description")
+                    .setNumberOfNFCs(2000 + i)
+                    .setNfcTitle("Nfc Title " + i)
+                    .setUser(user49.get());
+            usersNFC.add(nfc);
+            nfcRepo.save(nfc);
+        }
+        userRepo.save(user49.get());
     }
 
     private void seedDummyUsersTEST() {

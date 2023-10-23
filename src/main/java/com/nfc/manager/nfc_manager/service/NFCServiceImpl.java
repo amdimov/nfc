@@ -1,6 +1,7 @@
 package com.nfc.manager.nfc_manager.service;
 
 import com.nfc.manager.nfc_manager.entity.DTO.NFC_DTO;
+import com.nfc.manager.nfc_manager.entity.DTO.NFC_Edit_DTO;
 import com.nfc.manager.nfc_manager.entity.NFC;
 import com.nfc.manager.nfc_manager.entity.UserEntity;
 import com.nfc.manager.nfc_manager.entity.views.NFC_View;
@@ -46,7 +47,7 @@ public class NFCServiceImpl implements NFCService {
     public NFC_DTO buildNFC_DTO() {
         NFC_DTO nfc = new NFC_DTO();
         String randomUUID = UUID.randomUUID().toString().replace("-", "");
-        String code = randomUUID.substring(0, 5);
+        String code = randomUUID.substring(0, 10);
         UUID hash = UUID.randomUUID();
         return nfc.setStaticNFC_URL(hash.toString().toUpperCase(Locale.ROOT))
                 .setNfcCode(code.toUpperCase(Locale.ROOT));
@@ -74,12 +75,14 @@ public class NFCServiceImpl implements NFCService {
     }
 
     @Override
-    @Transactional
-    public Page<NFC_View> getAllNfcOfUser(Integer pageNo, Integer pageSize, String sortBy, String username) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
-
+    public Page<NFC_View> getAllNfcOfUser(Integer pageNo, Integer pageSize, String sortBy, String username,
+                                          String searchNFC) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("nfc." + sortBy).descending());
         UserEntity user = userRepo.findUserByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Username wasn't during retrieving NFC"));
+        if (!searchNFC.isEmpty() || !searchNFC.isBlank()){
+            return getAllNfcBySearchTerm(searchNFC.trim(), user, pageable);
+        }
         Page<NFC> allNfcOfUser = nfcRepo.getAllNfcOfUser(user.getUsername(), pageable);
         if (allNfcOfUser == null || !allNfcOfUser.hasContent()) {
             return Page.empty(pageable);
@@ -89,5 +92,19 @@ public class NFCServiceImpl implements NFCService {
         return new PageImpl<>(nfcViews, pageable, allNfcOfUser.getTotalElements());
     }
 
+    private Page<NFC_View> getAllNfcBySearchTerm(String searchNFC, UserEntity user, Pageable pageable) {
+        Page<NFC> allNfcOfUser = nfcRepo.findAllUserNfcBySearchTerm(user.getUsername(), searchNFC, pageable);
+        List<NFC_View> nfcViews = allNfcOfUser.stream().map(nfc -> modelMapper.map(nfc, NFC_View.class)).collect(Collectors.toList());
+        if (allNfcOfUser == null || !allNfcOfUser.hasContent()) {
+            return Page.empty(pageable);
+        }
+        return new PageImpl<>(nfcViews, pageable, allNfcOfUser.getTotalElements());
+    }
+    @Override
+    public NFC_Edit_DTO getUsersNFCByNfcCode(String username, String nfcCode) {
+        NFC nfc = nfcRepo.findByUser_UsernameAndNfcCode(username, nfcCode)
+        .orElseThrow(() -> new IllegalArgumentException("Username wasn't during retrieving NFC for editing"));
+        return modelMapper.map(nfc, NFC_Edit_DTO.class);
+    }
 
 }

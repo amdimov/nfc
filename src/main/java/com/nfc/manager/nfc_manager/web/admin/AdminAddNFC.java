@@ -1,6 +1,7 @@
 package com.nfc.manager.nfc_manager.web.admin;
 
 import com.nfc.manager.nfc_manager.entity.DTO.NFC_DTO;
+import com.nfc.manager.nfc_manager.entity.DTO.NFC_Edit_DTO;
 import com.nfc.manager.nfc_manager.entity.views.NFC_View;
 import com.nfc.manager.nfc_manager.entity.views.UserView;
 import com.nfc.manager.nfc_manager.service.NFCService;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/admin")
@@ -37,19 +40,30 @@ public class AdminAddNFC {
     @GetMapping("/{username}/all-nfc")
     public String allNfcView(@PathVariable(name = "username") String username,
                              @RequestParam(required = false) Optional<Integer> pageNo,
-                             @RequestParam(name = "pageSize", defaultValue = "10", required = false) Integer pageSize,
-                             @RequestParam(name = "sortBy", defaultValue = "registrationDate", required = false) String sortBy,
+                             @RequestParam(name = "pageSize", defaultValue = "9", required = false) Integer pageSize,
+                             @RequestParam(name = "sortBy", defaultValue = "createdDateTime", required = false) String sortBy,
+                             @RequestParam(name = "searchNFC", defaultValue = "", required = false) String searchNFC,
                              Model model){
-        Page<NFC_View> allNfcOfUser = nfcService.getAllNfcOfUser(pageNo.orElse(0), pageSize, sortBy, username);
+        Page<NFC_View> allNfcOfUser = nfcService.getAllNfcOfUser(pageNo.orElse(0), pageSize, sortBy, username, searchNFC);
+        model.addAttribute("username", username);
         model.addAttribute("allNfcOfUser", allNfcOfUser);
-        System.out.println(allNfcOfUser);
+        int totalPages = allNfcOfUser.getTotalPages();
+        model.addAttribute("currentPageSize", pageSize);
+        if (totalPages > 0){
+            List<Integer> pageNumbers = IntStream.range(1, totalPages+1)
+                    .boxed().collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+
+        }
+
+        model.addAttribute("searchNFC", searchNFC);
         return "admin/nfc/all-nfc";
     }
 
     @PostMapping("/{username}/add-nfc")
     public String addNFC(@PathVariable(name = "username") String username,
                          @Valid NFC_DTO nfc, BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes, Model model){
+                         RedirectAttributes redirectAttributes){
         if (bindingResult.hasErrors()){
             redirectAttributes.addFlashAttribute("nfc", nfc);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.nfc"
