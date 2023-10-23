@@ -66,7 +66,9 @@ public class NFCServiceImpl implements NFCService {
                 .setUser(user)
                 .setDisabled(false);
         nfcRepo.save(nfcEntity);
-        user.setNfcList(List.of(nfcEntity));
+        List<NFC> nfcList = user.getNfcList();
+        nfcList.add(nfcEntity);
+        user.setNfcList(nfcList);
         userRepo.save(user);
         return true;
     }
@@ -77,12 +79,14 @@ public class NFCServiceImpl implements NFCService {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
 
         UserEntity user = userRepo.findUserByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Username wasn't found in retrieving NFC"));
-        Optional<Page<List<NFC>>> allNfcOfUser1 = Optional.of(nfcRepo.getAllNfcOfUser(user.getUsername(), pageable));
+                .orElseThrow(() -> new IllegalArgumentException("Username wasn't during retrieving NFC"));
+        Page<NFC> allNfcOfUser = nfcRepo.getAllNfcOfUser(user.getUsername(), pageable);
+        if (allNfcOfUser == null || !allNfcOfUser.hasContent()) {
+            return Page.empty(pageable);
+        }
 
-        //TODO
-        List<NFC_View> nfcViews = allNfcOfUser1.get().stream().map(nfc -> modelMapper.map(nfc, NFC_View.class)).toList();
-        return new PageImpl<>(nfcViews, pageable, allNfcOfUser1.get().getTotalElements());
+        List<NFC_View> nfcViews = allNfcOfUser.stream().map(nfc -> modelMapper.map(nfc, NFC_View.class)).collect(Collectors.toList());
+        return new PageImpl<>(nfcViews, pageable, allNfcOfUser.getTotalElements());
     }
 
 

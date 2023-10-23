@@ -19,6 +19,8 @@ public class NFC_View {
 
     private String nfcDescription;
 
+    private Integer numberOfNFCs;
+
     private String staticNFC_URL;
 
     private String dynamicNFC_URL;
@@ -138,6 +140,15 @@ public class NFC_View {
 
     public NFC_View setId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public Integer getNumberOfNFCs() {
+        return numberOfNFCs;
+    }
+
+    public NFC_View setNumberOfNFCs(Integer numberOfNFCs) {
+        this.numberOfNFCs = numberOfNFCs;
         return this;
     }
 }

@@ -18,8 +18,15 @@ public class NFC extends BaseEntity{
     @Column(unique = true, nullable = false)
     private String staticNFC_URL;
 
+    //TODO
+    @Column
+    private String dynamicURLTitle;
     @Column(nullable = false)
     private String dynamicNFC_URL;
+
+    //TODO
+    @Column
+    private Integer numberOfNFCs;
 
     @Column
     private Long numberOfViews;
@@ -135,6 +142,24 @@ public class NFC extends BaseEntity{
 
     public NFC setUser(UserEntity user) {
         this.user = user;
+        return this;
+    }
+
+    public Integer getNumberOfNFCs() {
+        return numberOfNFCs;
+    }
+
+    public NFC setNumberOfNFCs(Integer numberOfNFCs) {
+        this.numberOfNFCs = numberOfNFCs;
+        return this;
+    }
+
+    public String getDynamicURLTitle() {
+        return dynamicURLTitle;
+    }
+
+    public NFC setDynamicURLTitle(String dynamicURLTitle) {
+        this.dynamicURLTitle = dynamicURLTitle;
         return this;
     }
 }

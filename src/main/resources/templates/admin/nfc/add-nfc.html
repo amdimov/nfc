@@ -82,6 +82,16 @@
 
                                 <div class="col-12 form-group">
                                     <label>NFC Static URL Extension</label>
+                                    <input type="number"
+                                           th:field="*{numberOfNFCs}"
+                                           id="checkout-form-billing-numberOfNFCs"
+                                           class="form-control required" placeholder="100">
+                                    <span style="color: red" th:if="${#fields.hasErrors('numberOfNFCs')}"
+                                          th:errors="*{numberOfNFCs}">Error message</span>
+                                </div>
+
+                                <div class="col-12 form-group">
+                                    <label>NFC Static URL Extension</label>
                                     <input type="text"
                                               th:field="*{staticNFC_URL}"
                                               id="checkout-form-billing-staticNFC_URL"

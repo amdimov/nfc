@@ -13,5 +13,5 @@ import java.util.Optional;
 @Repository
 public interface NFCRepo extends JpaRepository<NFC, Long> {
     @Query("SELECT nfc FROM UserEntity u JOIN u.nfcList nfc WHERE u.username = :username")
-    Page<List<NFC>> getAllNfcOfUser(String username, Pageable pageable);
+    Page<NFC> getAllNfcOfUser(String username, Pageable pageable);
 }

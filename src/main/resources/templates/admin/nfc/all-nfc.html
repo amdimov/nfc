@@ -25,7 +25,7 @@
     <!-- Content
     ============================================= -->
     <section id="content">
-        <div class="content-wrap" th:if="${userNFC.nfcList}">
+        <div class="content-wrap">
 
             <div class="section mt-0 overflow-visible">
                 <div class="container">
@@ -57,25 +57,27 @@
             </div>
 
 
-            <div class="container">
+            <h3 th:if="${#lists.isEmpty(allNfcOfUser.content)}">No NFC registered to this user</h3>
+            <div class="container" th:if="${not #lists.isEmpty(allNfcOfUser.content)}">
+
                 <div class="row">
 
                     <!-- Item 1 -->
-                    <div class="col-lg-4 col-sm-6 mb-4">
+                    <div th:each="e : ${allNfcOfUser}" th:object="${e}" class="col-lg-4 col-sm-6 mb-4">
                         <div class="i-products">
                             <div class="products-image">
                                 <a href="demo-crowdfunding-single.html">
-                                    <img src="https://capandura-s3-bucket1.s3.eu-central-1.amazonaws.com/584a303e-8659-4e53-9e45-18942573aa5f_3DEmblem_TPU_gold.jpg" alt="Image 1">
-                                    <span class="badge">Gadgets</span>
+                                    <img th:src="*{imagePreviewURL}" th:alt="*{nfcTitle}">
+                                    <span class="badge" style="background-color: green; color: white;" th:if="*{!disabled}">Active</span>
+                                    <span class="badge" style="background-color: red; color: white;"  th:if="*{disabled}">Inactive</span>
                                 </a>
                             </div>
                             <div class="products-desc">
-                                <h3><a href="demo-crowdfunding-single.html">iDrone 2019</a></h3>
-                                <p>Holisticly conceptualize transparent niche markets whereas top-line web services. Monotonectally parallel task cross-unit platforms rather than.</p>
-                                <div class="skill-progress mb-3" data-percent="73" style="--cnvs-progress-height: 0.25rem;">
+                                <h3><a href="demo-crowdfunding-single.html" th:text="*{nfcTitle}">Title</a></h3>
+                                <p th:text="*{nfcDescription}">Description</p>
+                                <div class="skill-progress mb-3" data-percent="100" style="--cnvs-progress-height: 0.25rem;">
                                     <div class="skill-progress-title d-flex justify-content-between mb-2">
-                                        <span class="counter"><span data-from="0" data-to="73" data-refresh-interval="10" data-speed="1200"></span><strong>%</strong> Funded</span>
-                                        <span class="counter"><span data-from="0" data-to="20" data-refresh-interval="3" data-speed="1200"></span> Days Left</span>
+                                        <span class="counter"><span data-from="0" th:data-to="*{numberOfNFCs}" data-refresh-interval="10" data-speed="1200"></span><strong> pieces</strong></span>
                                     </div>
                                     <div class="skill-progress-bar">
                                         <div class="skill-progress-percent bg-color"></div>
@@ -84,10 +86,10 @@
                                 <div class="products-hoverlays">
                                     <span class="products-location"><i class="bi-geo-alt-fill"></i> Melbourne, Australia</span>
                                     <ul class="list-group-flush my-3 mb-0">
-                                        <li class="list-group-item"><strong>$12,32,000</strong> Pledged</li>
-                                        <li class="list-group-item"><strong>123</strong> Partcipants</li>
-                                        <li class="list-group-item"><strong>345</strong> Contributions</li>
-                                        <li class="list-group-item"><strong>20</strong> days remaining</li>
+                                        <li class="list-group-item">Points to <strong th:text="*{dynamicNFC_URL}"></strong></li>
+<!--                                        <li class="list-group-item"><strong th:text="*{numberOfNFCs}">NFC Number</strong> NFCs</li>-->
+                                        <li class="list-group-item">Quantity <strong th:text="*{numberOfNFCs}">Number</strong></li>
+                                        <li class="list-group-item">Launched on <strong th:text="*{#temporals.format(createdDateTime, 'dd-MM-yyyy HH:mm')}">Date</strong></li>
                                     </ul>
                                     <div class="product-user d-flex align-items-center mt-4">
                                         <img src="demos/crowdfunding/images/investors/1.jpg" alt="">
@@ -98,81 +100,6 @@
                         </div>
                     </div>
 
-                    <!-- Item 2 -->
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <div class="i-products">
-                            <div class="products-image">
-                                <a href="demo-crowdfunding-single.html">
-                                    <img src="https://capandura-s3-bucket1.s3.eu-central-1.amazonaws.com/584a303e-8659-4e53-9e45-18942573aa5f_3DEmblem_TPU_gold.jpg" alt="Image 2">
-                                    <span class="badge">Lights</span>
-                                </a>
-                            </div>
-                            <div class="products-desc">
-                                <h3><a href="demo-crowdfunding-single.html">Bluetooth Lights</a></h3>
-                                <p>Appropriately monetize diverse leadership skills vis-a-vis unique core competencies. Enthusiastically transition future-proof models.</p>
-                                <div class="skill-progress mb-3" data-percent="85" style="--cnvs-progress-height: 0.25rem;">
-                                    <div class="skill-progress-title d-flex justify-content-between mb-2">
-                                        <span class="counter"><span data-from="0" data-to="85" data-refresh-interval="10" data-speed="2000"></span><strong>%</strong> Funded</span>
-                                        <span class="counter"><span data-from="0" data-to="11" data-refresh-interval="3" data-speed="1200"></span> Days Left</span>
-                                    </div>
-                                    <div class="skill-progress-bar">
-                                        <div class="skill-progress-percent bg-color"></div>
-                                    </div>
-                                </div>
-                                <div class="products-hoverlays">
-                                    <span class="products-location"><i class="bi-geo-alt-fill"></i> Singapore</span>
-                                    <ul class="list-group-flush my-3 mb-0">
-                                        <li class="list-group-item"><strong>$12,32,000</strong> Pledged</li>
-                                        <li class="list-group-item"><strong>123</strong> Partcipants</li>
-                                        <li class="list-group-item"><strong>345</strong> Contributions</li>
-                                        <li class="list-group-item"><strong>11</strong> days remaining</li>
-                                    </ul>
-                                    <div class="product-user d-flex align-items-center mt-4">
-                                        <img src="demos/crowdfunding/images/investors/2.jpg" alt="">
-                                        <a href="demo-crowdfunding-single.html">By Hanson Deck</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Item 3 -->
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <div class="i-products">
-                            <div class="products-image">
-                                <a href="demo-crowdfunding-single.html">
-                                    <img src="https://capandura-s3-bucket1.s3.eu-central-1.amazonaws.com/584a303e-8659-4e53-9e45-18942573aa5f_3DEmblem_TPU_gold.jpg" alt="Image 3">
-                                    <span class="badge">Travel</span>
-                                </a>
-                            </div>
-                            <div class="products-desc">
-                                <h3><a href="demo-crowdfunding-single.html">Electric Bike</a></h3>
-                                <p>Authoritatively drive distributed platforms whereas quality methods of empowerment. Conveniently deploy error-free portals vis-a-vis internal.</p>
-                                <div class="skill-progress mb-3" data-percent="89" style="--cnvs-progress-height: 0.25rem;">
-                                    <div class="skill-progress-title d-flex justify-content-between mb-2">
-                                        <span class="counter"><span data-from="0" data-to="89" data-refresh-interval="10" data-speed="2000"></span><strong>%</strong> Funded</span>
-                                        <span class="counter"><span data-from="0" data-to="19" data-refresh-interval="3" data-speed="1200"></span> Days Left</span>
-                                    </div>
-                                    <div class="skill-progress-bar">
-                                        <div class="skill-progress-percent bg-color"></div>
-                                    </div>
-                                </div>
-                                <div class="products-hoverlays">
-                                    <span class="products-location"><i class="bi-geo-alt-fill"></i> Dubai, UAE</span>
-                                    <ul class="list-group-flush my-3 mb-0">
-                                        <li class="list-group-item"><strong>$12,32,000</strong> Pledged</li>
-                                        <li class="list-group-item"><strong>123</strong> Partcipants</li>
-                                        <li class="list-group-item"><strong>345</strong> Contributions</li>
-                                        <li class="list-group-item"><strong>19</strong> days remaining</li>
-                                    </ul>
-                                    <div class="product-user d-flex align-items-center mt-4">
-                                        <img src="demos/crowdfunding/images/investors/3.jpg" alt="">
-                                        <a href="demo-crowdfunding-single.html">By Eleanor Fant</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>
