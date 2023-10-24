@@ -41,7 +41,7 @@ public class AdminRegisterUserController {
         userDTO.setRegistrationDate(LocalDateTime.now());
         userService.registerUser(userDTO);
 
-        return "redirect:/admin/all-user";
+        return "redirect:/admin/all-users";
     }
 
     @ModelAttribute("userDTO")

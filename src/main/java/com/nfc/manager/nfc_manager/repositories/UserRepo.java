@@ -13,4 +13,5 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findUserByUsername(String username);
 
     Boolean existsByUsernameIgnoreCase(String username);
+    Boolean existsByUsernameIgnoreCaseAndIdNot(String username, Long id);
 }

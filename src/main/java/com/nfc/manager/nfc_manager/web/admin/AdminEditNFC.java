@@ -48,6 +48,7 @@ public class AdminEditNFC {
                     , bindingResult);
             return "redirect:/admin/"+username + "/" +nfcCode + "/edit-nfc";
         }
+        nfcService.editUsersNFC(username, userNfc);
         System.out.println(userNfc);
         return "redirect:/admin/"+username + "/" +nfcCode + "/edit-nfc";
     }

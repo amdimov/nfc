@@ -107,4 +107,27 @@ public class NFCServiceImpl implements NFCService {
         return modelMapper.map(nfc, NFC_Edit_DTO.class);
     }
 
+    @Override
+    public Boolean editUsersNFC(String username, NFC_Edit_DTO userNfc) {
+        UserEntity user = userRepo.findUserByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("No user found during NFC edit"));
+        Optional<NFC> nfcOpt = user.getNfcList().stream().filter(nfc -> nfc.getNfcCode().equals(userNfc.getNfcCode()))
+                .findFirst();
+        if (nfcOpt.isPresent()){
+            if (!userNfc.getFilePreview().isEmpty()) {
+                URL url = s3Manager.replaceImageByURL(nfcOpt.get().getImagePreviewURL(), userNfc.getFilePreview());
+                userNfc.setImagePreviewURL(url.toString());
+            }
+            userNfc.setCreatedDateTime(nfcOpt.get().getCreatedDateTime());
+            nfcOpt.ifPresent(nfc -> modelMapper.map(userNfc, nfc));
+            System.out.println(userNfc);
+            System.out.println(nfcOpt.get());
+            nfcRepo.save(nfcOpt.get());
+            userRepo.save(user);
+            return true;
+        }
+
+        return false;
+    }
+
 }

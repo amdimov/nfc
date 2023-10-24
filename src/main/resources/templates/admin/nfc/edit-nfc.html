@@ -130,18 +130,15 @@
                                           th:errors="*{dynamicNFC_URL}">Error message</span>
                                 </div>
                                 <div class="col-12 form-group">
-                                    <label>Enabled</label>
-                                    <div class="switch mb-4">
+                                    <label>Disabled</label>
+                                    <div class="form-switch form-check fs-5 mb-4">
 <!--                                        TODO-->
-                                        <input th:field="*{disabled}" th:id="switch-toggle-2" class="switch-toggle switch-toggle-round" type="checkbox">
+                                        <input class="form-check-input" th:field="*{disabled}" th:id="switch-toggle-2" type="checkbox">
                                         <label th:for="switch-toggle-2"></label>
                                     </div>
-<!--                                    <span style="color: red" th:if="${#fields.hasErrors('dynamicNFC_URL')}"-->
-<!--                                          th:errors="*{dynamicNFC_URL}">Error message</span>-->
                                 </div>
                                 <input type="hidden" th:field="*{imagePreviewURL}">
                                 <input type="hidden" th:field="*{deleted}">
-                                <input type="hidden" th:field="*{createdDateTime}">
                                 <input type="hidden" th:field="*{id}">
 
                             </div>

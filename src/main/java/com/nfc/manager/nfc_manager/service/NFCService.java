@@ -20,4 +20,6 @@ public interface NFCService {
     Page<NFC_View> getAllNfcOfUser(Integer pageNo, Integer pageSize, String sortBy, String username, String searchNFC);
 
     NFC_Edit_DTO getUsersNFCByNfcCode(String username, String nfcCode);
+
+    Boolean editUsersNFC(String username, NFC_Edit_DTO userNfc);
 }

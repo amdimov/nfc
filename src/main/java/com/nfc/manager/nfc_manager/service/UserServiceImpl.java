@@ -1,6 +1,7 @@
 package com.nfc.manager.nfc_manager.service;
 
 import com.nfc.manager.nfc_manager.entity.DTO.UserDTO;
+import com.nfc.manager.nfc_manager.entity.DTO.UserEditDTO;
 import com.nfc.manager.nfc_manager.entity.NFC;
 import com.nfc.manager.nfc_manager.entity.UserEntity;
 import com.nfc.manager.nfc_manager.entity.UserRoleEnum;
@@ -70,6 +71,47 @@ public class UserServiceImpl implements UserService {
     public UserView getUserByUsername(String username) {
         Optional<UserEntity> user = userRepo.findUserByUsername(username);
         return modelMapper.map(user.orElseThrow(()->new IllegalArgumentException("No user with this username")), UserView.class);
+    }
+    @Override
+    public UserEditDTO getUserEditDTOByUsername(String username) {
+        Optional<UserEntity> user = userRepo.findUserByUsername(username);
+        return modelMapper.map(user.orElseThrow(()->new IllegalArgumentException("No user with this username")), UserEditDTO.class);
+    }
+
+    @Override
+    public Boolean editUser(String username, UserEditDTO userEditDTO) {
+        UserEntity user = userRepo.findUserByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("No user found with this username during editing UserEntity"));
+
+        mapUserEditDTOtoUserEntity(userEditDTO, user);
+        userRepo.save(user);
+        return true;
+    }
+
+    private void mapUserEditDTOtoUserEntity(UserEditDTO userEditDTO, UserEntity user) {
+        if (!userEditDTO.getPassword().isBlank()){
+            user.setPassword(passwordEncoder.encode(userEditDTO.getPassword()));
+        }
+        user.setUsername(userEditDTO.getUsername())
+                .setCompany(userEditDTO.getCompany())
+                .setFirstName(userEditDTO.getFirstName())
+                .setLastName(userEditDTO.getLastName())
+                .setContactEmail(userEditDTO.getContactEmail())
+                .setCountry(userEditDTO.getCountry())
+                .setAddress(userEditDTO.getAddress())
+                .setCity(userEditDTO.getCity())
+                .setPostCode(userEditDTO.getPostCode())
+                .setPhoneNumber(userEditDTO.getPhoneNumber());
+    }
+
+    @Override
+    public Boolean isUsernameUniqueForUpdate(Long id, String username) {
+        return !userRepo.existsByUsernameIgnoreCaseAndIdNot(username, id);
+    }
+
+    @Override
+    public Boolean isUsernameUniqueForCreate(String username) {
+        return !userRepo.existsByUsernameIgnoreCase(username);
     }
 
 }
