@@ -2,9 +2,12 @@ package com.nfc.manager.nfc_manager.service;
 
 import com.nfc.manager.nfc_manager.entity.DTO.NFC_DTO;
 import com.nfc.manager.nfc_manager.entity.DTO.NFC_Edit_DTO;
+import com.nfc.manager.nfc_manager.entity.DTO.NFC_Single_Edit_DTO;
 import com.nfc.manager.nfc_manager.entity.NFC;
 import com.nfc.manager.nfc_manager.entity.UserEntity;
+import com.nfc.manager.nfc_manager.entity.views.NFCGeneralStatisticsView;
 import com.nfc.manager.nfc_manager.entity.views.NFC_View;
+import com.nfc.manager.nfc_manager.entity.views.NFCsingleStatsView;
 import com.nfc.manager.nfc_manager.entity.views.UserView;
 import com.nfc.manager.nfc_manager.repositories.NFCRepo;
 import com.nfc.manager.nfc_manager.repositories.UserRepo;
@@ -14,6 +17,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -128,6 +133,58 @@ public class NFCServiceImpl implements NFCService {
         }
 
         return false;
+    }
+
+    @Override
+    public NFCGeneralStatisticsView getGeneralStatisticsOfUser(String username) {
+        UserEntity user = userRepo.findUserByUsername(username)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("No username found during extracting general statistics"));
+        List<NFC> userNfcs = user.getNfcList();
+        Integer totalNumberOfNFCs = userNfcs.stream().mapToInt(nfc -> nfc.getNumberOfNFCs()).sum();
+        Integer numberOfCampaigns = userNfcs.size();
+        Long totalNumberOfViews = userNfcs.stream().mapToLong(nfc -> nfc.getNumberOfViews()).sum();
+        return new NFCGeneralStatisticsView().setTotalNumberOfNFCs(totalNumberOfNFCs)
+                .setNumberOfCampaigns(numberOfCampaigns)
+                .setTotalNumberOfViews(totalNumberOfViews);
+    }
+
+    @Override
+    public NFCsingleStatsView extractStatisticsOfNFC(String username, String nfcCode) {
+        NFC nfc = nfcRepo.findByUser_UsernameAndNfcCode(username, nfcCode).orElseThrow(() ->
+                new IllegalArgumentException("No username or nfc found during fetching nfc statics"));
+        double numberOfNFCs = (double) nfc.getNumberOfNFCs();
+        double numberOfViews = (double) nfc.getNumberOfViews();
+        BigDecimal result = BigDecimal.valueOf(numberOfViews / numberOfNFCs * 100)
+                .setScale(2, RoundingMode.HALF_UP);
+        double percentOfOpenedNFCvsQuantity = result.doubleValue();
+        return new NFCsingleStatsView().setNfcQuantity((int) numberOfNFCs)
+                .setTotalViews((long) numberOfViews)
+                .setPercentOfOpenedNFCVsQuantity(percentOfOpenedNFCvsQuantity);
+    }
+
+    @Override
+    public Boolean editSingleNFCofUser(String username, String nfcCode, NFC_Single_Edit_DTO nfcEditDto) {
+        NFC nfc = nfcRepo.findByUser_UsernameAndNfcCode(username, nfcCode)
+                .orElseThrow(() -> new IllegalArgumentException("No NFC found of this user during editing single NFC"));
+        nfc.setDynamicNFC_URL(nfcEditDto.getDynamicNFC_URL());
+        nfcRepo.save(nfc);
+        return true;
+    }
+
+    @Override
+    public String redirectNFC(String nfcCode, String staticCode) {
+        Optional<NFC> nfc = nfcRepo.getByNfcCodeAndStaticNFCURL(nfcCode, staticCode);
+
+        if (nfc.isPresent()){
+            //TODO Make view counter as an event
+            Long views = nfc.get().getNumberOfViews() + 1L;
+            System.out.println();
+            nfc.get().setNumberOfViews(views);
+            nfcRepo.save(nfc.get());
+            return nfc.get().getDynamicNFC_URL();
+        }
+        return "";
     }
 
 }

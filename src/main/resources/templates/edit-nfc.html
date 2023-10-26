@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/head :: head}">
+</head>
+
+<body class="stretched side-header open-header push-wrapper close-header-on-scroll">
+<!-- Preloader -->
+<div class="preloader preloader-cover-page">
+    <div class="css3-spinner" style="--cnvs-loader-color:var(--cnvs-themecolor);">
+        <div class="css3-spinner-bounce1"></div>
+        <div class="css3-spinner-bounce2"></div>
+        <div class="css3-spinner-bounce3"></div>
+    </div>
+</div>
+<!-- Document Wrapper
+============================================= -->
+<div id="wrapper">
+    <div th:replace="~{fragments/header :: header-trigger}"></div>
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container">
+                <!--                <h1 class="titular-title fw-normal text-center mb-5">EDIT USER NFC</h1>-->
+                <div class="row flex-row-reverse align-items-center justify-content-between g-5">
+                    <div class="col-lg-6">
+                        <div class="cascading-images">
+                            <div class="cascading-images-inner">
+                                <div class="cascading-image p-6">
+                                    <div style="">
+                                        <div class="parallax" data-bottom-top="transform: translate(0%, -15%)" data-top-bottom="transform: translate(-10%, 15%)">
+                                            <img th:src="${userNfc.imagePreviewURL}" alt="Image" data-animate="zoomIn faster" class="rounded-3 shadow-lg">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h2 th:text="${userNfc.nfcTitle}">Title</h2>
+                        <p  th:text="${BASE_URL} + '/' + ${userNfc.nfcCode} +'/'+ ${userNfc.staticNFC_URL}">Description</p>
+                        <p  th:text="'Pointing to: ' + ${userNfc.dynamicNFC_URL}">Description</p>
+                        <form th:object="${userNfc}"
+                              th:action="@{/{nfcCode}/edit-nfc(nfcCode=${nfcCode})}"
+                              th:method="post"
+                              enctype="multipart/form-data"
+                        >
+                        <div class="promo promo-dark promo-uppercase p-4 p-md-5 mb-5">
+                            <div class="row align-items-center">
+
+                                    <div class="col-12 col-lg">
+
+                                            <label style="color: white">Your NFC logos points to</label>
+                                            <input type="url"
+                                                   th:field="*{dynamicNFC_URL}"
+                                                   id="checkout-form-billing-dynamicNFC_URL"
+                                                   class="form-control required" placeholder="https://megaprint-transfers.com">
+                                            <span style="color: red" th:if="${#fields.hasErrors('dynamicNFC_URL')}"
+                                                  th:errors="*{dynamicNFC_URL}">Error message</span>
+
+                                    </div>
+                                    <div class="col-12 col-lg-auto mt-4 mt-lg-0">
+                                        <button class="btn btn-lg btn-outline-light m-0">SAVE</button>
+                                    </div>
+
+                            </div>
+                        </div>
+                        </form>
+                        <div class="row mb-12 col-mb-50 justify-content-between" th:object="${nfcStats}">
+                            <div class="col-md-12">
+                                <div class="skill-progress mb-4" data-percent="100" data-speed="2000" style="--cnvs-progress-height: 36px; --cnvs-progress-rounded: 50rem;">
+                                    <div class="skill-progress-bar">
+                                        <div class="skill-progress-percent gradient-blue-purple"></div>
+                                        <div class="d-flex position-absolute w-100 h-100 px-3 dark justify-content-between align-items-center">
+                                            <h5 class="mb-0">Quantity</h5>
+                                            <div class="text-dark">
+                                                <small class="fw-semibold"><div style="color: white" class="counter counter-inherit counter-instant"><span style="color: white" data-from="0" th:data-to="*{nfcQuantity}" data-refresh-interval="30" data-speed="2000">0</span> pcs</div></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-progress mb-12" data-percent="100" data-speed="2000" style="--cnvs-progress-height: 36px; --cnvs-progress-rounded: 50rem;">
+                                    <div class="skill-progress-bar">
+                                        <div class="skill-progress-percent gradient-dark"></div>
+                                        <div class="d-flex position-absolute w-100 h-100 px-3 dark justify-content-between align-items-center">
+                                            <h5 class="mb-0">Views</h5>
+                                            <div class="text-dark">
+                                                <small class="fw-semibold"><div style="color: white" class="counter counter-inherit counter-instant"><span style="color: white" data-from="0" th:data-to="*{totalViews}" data-refresh-interval="30" data-speed="2000">0</span> views</div></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-progress mb-12" th:data-percent="*{percentOfOpenedNFCVsQuantity}" data-speed="2000" style="--cnvs-progress-height: 36px; --cnvs-progress-rounded: 50rem;">
+                                    <div class="skill-progress-bar">
+                                        <div class="skill-progress-percent gradient-green-dark"></div>
+                                        <div class="d-flex position-absolute w-100 h-100 px-3 dark justify-content-between align-items-center">
+                                            <h5 class="mb-0">Opened NFC vs. Quantity</h5>
+                                            <div class="text-dark">
+                                                <small class="fw-semibold"><div class="counter counter-inherit counter-instant"><span data-from="0" th:data-to="*{percentOfOpenedNFCVsQuantity}" data-refresh-interval="30" data-speed="2000">0</span>%</div></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+
+    <!--    <footer th:replace="~{fragments/footer :: footer}"></footer>-->
+
+</div><!-- #wrapper end -->
+
+<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="uil uil-angle-up"></div>
+
+<!-- JavaScripts
+============================================= -->
+<script src="/js/plugins.min.js"></script>
+<script src="/js/functions.bundle.js"></script>
+<script src="/js/components/bs-filestyle.js"></script>
+<script>
+    jQuery(document).ready(function() {
+        jQuery("#input-5").fileinput({showCaption: false});
+
+        jQuery("#input-6").fileinput({
+            showUpload: false,
+            maxFileCount: 10,
+            mainClass: "input-group-lg",
+            showCaption: true
+        });
+
+        jQuery("#input-8").fileinput({
+            mainClass: "input-group-md",
+            showUpload: true,
+            previewFileType: "image",
+            browseClass: "btn btn-success",
+            browseLabel: "Pick Image",
+            browseIcon: "<i class=\"bi-image\"></i> ",
+            removeClass: "btn btn-danger",
+            removeLabel: "Delete",
+            removeIcon: "<i class=\"bi-trash3\"></i> ",
+            uploadClass: "btn btn-info",
+            uploadLabel: "Upload",
+            uploadIcon: "<i class=\"bi-upload\"></i> "
+        });
+
+        jQuery("#input-9").fileinput({
+            previewFileType: "text",
+            allowedFileExtensions: ["txt", "md", "ini", "text"],
+            previewClass: "bg-warning",
+            browseClass: "btn btn-primary",
+            removeClass: "btn btn-secondary",
+            uploadClass: "btn btn-secondary",
+        });
+
+        jQuery("#input-10").fileinput({
+            showUpload: false,
+            layoutTemplates: {
+                main1: "{preview}\n" +
+                    "<div class=\'input-group {class}\'>\n" +
+                    "       {browse}\n" +
+                    "       {upload}\n" +
+                    "       {remove}\n" +
+                    "   {caption}\n" +
+                    "</div>"
+            }
+        });
+
+        jQuery("#input-11").fileinput({
+            maxFileCount: 10,
+            allowedFileTypes: ["image", "video"]
+        });
+
+        jQuery("#input-12").fileinput({
+            showPreview: false,
+            allowedFileExtensions: ["zip", "rar", "gz", "tgz"],
+            elErrorContainer: "#errorBlock"
+        });
+    });
+
+</script>
+</body>
+</html>

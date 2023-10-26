@@ -2,8 +2,11 @@ package com.nfc.manager.nfc_manager.service;
 
 import com.nfc.manager.nfc_manager.entity.DTO.NFC_DTO;
 import com.nfc.manager.nfc_manager.entity.DTO.NFC_Edit_DTO;
+import com.nfc.manager.nfc_manager.entity.DTO.NFC_Single_Edit_DTO;
 import com.nfc.manager.nfc_manager.entity.NFC;
+import com.nfc.manager.nfc_manager.entity.views.NFCGeneralStatisticsView;
 import com.nfc.manager.nfc_manager.entity.views.NFC_View;
+import com.nfc.manager.nfc_manager.entity.views.NFCsingleStatsView;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +25,12 @@ public interface NFCService {
     NFC_Edit_DTO getUsersNFCByNfcCode(String username, String nfcCode);
 
     Boolean editUsersNFC(String username, NFC_Edit_DTO userNfc);
+
+    NFCGeneralStatisticsView getGeneralStatisticsOfUser(String username);
+
+    NFCsingleStatsView extractStatisticsOfNFC(String username, String nfcCode);
+
+    Boolean editSingleNFCofUser(String username, String nfcCode, NFC_Single_Edit_DTO nfcEditDto);
+
+    String redirectNFC(String nfcCode, String staticCode);
 }

@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -30,4 +29,7 @@ public interface NFCRepo extends JpaRepository<NFC, Long> {
     Page<NFC> findAllUserNfcBySearchTerm(@Param("username") String username, @Param("searchTerm") String searchTerm, Pageable pageable);
 
     Optional<NFC> findByUser_UsernameAndNfcCode(String username, String nfcCode);
+
+    @Query("SELECT nfc FROM NFC nfc WHERE nfc.nfcCode = :nfcCode AND nfc.staticNFC_URL = :staticNFCURL")
+    Optional<NFC> getByNfcCodeAndStaticNFCURL(String nfcCode, String staticNFCURL);
 }

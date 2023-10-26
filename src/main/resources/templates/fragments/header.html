@@ -16,10 +16,8 @@
         <!-- Logo
         ============================================= -->
         <div id="logo">
-          <a href="index.html">
+          <a th:href="@{/home}">
             <img class="logo-default" srcset="/images/logo-black.png, /images/logo-black.png 2x" src="/images/logo-black.png" alt="NFC Transfers Logo">
-            <img class="logo-dark" srcset="images/logo-side-dark.png, images/logo-side-dark@2x.png 2x" src="images/logo-side-dark@2x.png" alt="Canvas Logo">
-            <img class="logo-mobile" srcset="/images/logo-black.png, /images/logo-black.png 2x" src="/images/logo-black.png" alt="Canvas Logo">
           </a>
         </div><!-- #logo end -->
 
@@ -46,33 +44,29 @@
                   <a class="menu-link" th:href="@{/admin/register-user}"><div>Register User</div></a>
                 </li>
                 <li class="menu-item">
-                  <a class="menu-link" th:href="@{/admin/add-users}"><div>All Users</div></a>
+                  <a class="menu-link" th:href="@{/admin/all-users}"><div>All Users</div></a>
                 </li>
               </ul>
             </li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Pages</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Portfolio</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Blog</div></a>
-            </li>
-            <li class="menu-item"><a class="menu-link" href="shop.html"><div>Shop</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Shortcodes</div></a>
-            </li>
+            <li class="menu-item"><a class="menu-link" th:href="@{/my-nfc}"><div>My NFC</div></a></li>
+            <li class="menu-item"><a class="menu-link" th:href="@{/my-account}"><div>Account</div></a></li>
           </ul>
 
           <!--          USER NAVBAR-->
           <ul class="menu-container" sec:authorize="hasRole('USER')">
             <li class="menu-item"><a class="menu-link" th:href="@{/home}"><div>Home</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Pages</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Portfolio</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Blog</div></a>
-            </li>
-            <li class="menu-item"><a class="menu-link" href="shop.html"><div>Shop</div></a></li>
-            <li class="menu-item"><a class="menu-link" href="#"><div>Shortcodes</div></a>
-            </li>
+            <li class="menu-item"><a class="menu-link" th:href="@{/my-nfc}"><div>My NFC</div></a></li>
+            <li class="menu-item"><a class="menu-link" th:href="@{/my-account}"><div>Account</div></a></li>
           </ul>
         </nav><!-- #primary-menu end -->
 
       </div>
+    </div>
+    <div style="left: 0; margin-bottom: 2rem;">
+      <form th:action="@{/logout}" th:method="post">
+        <button type="submit" class="button button-mini button-border button-border-thin button-red"><i class="fa-solid fa-power-off"></i>Logout</button>
+        <!--                <button class="button button-3d button-red m-0" value="LOGOUT"> <i class="bi-door-open"></i>LOGOUT</button>-->
+      </form>
     </div>
   </div>
   <div class="header-wrap-clone"></div>

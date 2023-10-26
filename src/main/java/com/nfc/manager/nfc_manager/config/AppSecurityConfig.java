@@ -38,9 +38,9 @@ public class AppSecurityConfig {
 //            requestCache.setMatchingRequestParameterName("/home");
             http
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/nfc/**").permitAll()
                         .requestMatchers("/admin/**").hasRole(UserRoleEnum.ADMIN.name())
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/url/**").permitAll()
                         .requestMatchers("/**").authenticated()
                         .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated()
@@ -50,6 +50,13 @@ public class AppSecurityConfig {
                         .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                         .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                         .defaultSuccessUrl("/home", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
                 .csrf((csrf) -> csrf

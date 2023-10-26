@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public class NFC_Edit_DTO {
     private Long id;
-    @NotBlank(message = "Should contain ID Number")
+    @NotBlank(message = "Should contain NFC CODE")
     private String nfcCode;
 
     @ValidImage

@@ -87,6 +87,7 @@ public class DB_Seed implements CommandLineRunner {
                     .setImagePreviewURL("https://capandura-s3-bucket1.s3.eu-central-1.amazonaws.com/dd7ee455-b430-4397-afe1-c9e6cf22bf7e_BRING_ME_BACK.jpg")
                     .setNfcDescription("Description")
                     .setNumberOfNFCs(2000 + i)
+                    .setNumberOfViews(100L)
                     .setNfcTitle("Nfc Title " + i)
                     .setUser(user49.get());
             usersNFC.add(nfc);
